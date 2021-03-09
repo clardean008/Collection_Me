@@ -2,14 +2,18 @@
 
 The files in this repository were used to configure the network depicted below.
 
-![Network Diagram](Diagrams/Azure_Virtual_Network_Week_13_P1.png)
+![Network Diagram](Diagrams/network.png)
+
+
+
+
 
 These files have been tested and used to generate a live ELK deployment on Azure. They can be used to either recreate the entire deployment pictured above. Alternatively, select portions of the _Yaml__ file may be used to install only certain pieces of it, such as Filebeat.
 
-  - pentest.yml 
-  - install-elk.yml
-  - filebeat-playbook.yml
-  - metricbeat-playbook.yml
+  - [pentest.yml](Ansible/pentest.cfg) 
+  - [install-elk.yml](Ansible/install-elk.yml)
+  - [filebeat-playbook.yml](Ansible/filebeat-playbook.yml)
+  - [metricbeat-playbook.yml](Ansible/meatbeat-playbook.yml)
 
 This document contains the following details:
 - Description of the Topologu
@@ -26,7 +30,7 @@ The main purpose of this network is to expose a load-balanced and monitored inst
  Load balancing ensures that the application will be highly avalible, in addition to restricting _access_ to the network.
 -What aspect of security do load balancers protect? load balancers protect organzations against distributed denial-of-service(DDoS) attacks. The load balencer does this by shifting attach traffic  from the companies server to a public cloud servier.
 
--What is the advantage of a jump box?_ a Jump box biggest advantages is that its a single point of access into the network and it is secure. All admin people use the jump box to login to the  network before performing any administrive tasks. 
+-What is the advantage of a jump box?_ a Jump box biggest advantages is that its a single point of access into the network and it is secure. All admin people use the jump box to login to the  network before performing any administrive tasks. This way login, time and what they have done can be tracked.
 
 Integrating an ELK server allows users to easily monitor the vulnerable VMs for changes to the _log files_ and system _operating system_. 
 
@@ -61,6 +65,10 @@ A summary of the access policies in place can be found in the table below.
 | Home to VN  | Yes                 | Home IP address     |
 | Web to VN   | Yes                 | Home IP address     |
 | ssh From JB | Yes                 | 10.0.0.4             |
+| SSH   ELK   | Yes                 | Home IP  TCP Port 22            |
+| Home to ELK | Yes                 | Home IP TCP Port 5601             |
+
+
 
 ### Elk Configuration
 
@@ -93,10 +101,10 @@ We have installed the following Beats on these machines:
 
 These Beats allow us to collect the following information from each machine:
 - In 1-2 sentences, explain what kind of data each beat collects, and provide 1 example of what you expect to see. E.g., `Winlogbeat` collects Windows logs, which we use to track user logon events, etc.- Filebeat collects the following data syslogs/sudo commands/SSH logins/New users and groups and sends it to the  ELK stack to be analysed I would expect to see ssh logins and sudo commands. ref to 
-![Filebeat running](Image/Filebeats.png)
+![Filebeat running](Images/Filebeats.png)
 
 - Filemetrics collects the following data CPU usage / Memory usage / Network IO and I would expect to see CPU, memory and network usage running but nothing pushing these system hardwares to hard. ref to 
-![Metricneat running](Image/Metricbeats.png)
+![Metricbeat running](Images/Metricbeat.png)
 
 ### Using the Playbook
 In order to use the playbook, you will need to have an Ansible control node already configured. Assuming you have such a control node provisioned: 
@@ -107,7 +115,7 @@ SSH into the control node and follow the steps below:
 [webservers]                                                                                          10.0.0.5 ansible_python_interpreter=/usr/bin/python3                            
 10.0.0.6 ansible_python_interpreter=/usr/bin/python3 
 10.0.0.7 ansible_python_interpreter=/usr/bin/python3 
-                                                                                                                                                                                           [elk]                                                                                                 10.1.0.4 ansible_python_interpreter=/usr/bin/python3  
+                                                                                                 [elk]                                                                                                 10.1.0.4 ansible_python_interpreter=/usr/bin/python3  
 
 - Run the playbook, and navigate to _Web-1 DVWA_ to check that the installation worked as expected.
 
@@ -120,32 +128,35 @@ _TODO: Answer the following questions to fill in the blanks:_
 
 _As a **Bonus**, provide the specific commands the user will need to run to download the playbook, update the files, etc._
 
-ssh to jump-box                          ( shh into jump box)
-sudo docker container list -a            ( lists all container on jump box)
-sudo docker start great_mahaviar         ( start docker container great_mahaviar)
-sudo docker ps                           ( List docker container that are running)
-sudo docker attach great_mahaviar        ( attch container great_mahaviar)
-cd /etc/ansible                          ( Change director)
-ls -la                                   ( List all file in dir)
-nano hosts                               ( add weservers and elk machines)
-nano ansible.cfg                         ( add user name)
-nano pentest.yml                         ( write YAML file to install docker and DVWA on webservers)
-ansible-playbook pentest.yml             ( run playbook to install docker and dvwa container)
-ssh to Web-1                             ( ssh to Web-1)
-sudo docker ps                           ( check to make sure the container has installed)
-exit                                     ( Exit Web-1 return to jump-box)
-nano install-elk.yml                     ( write yaml file to install docker and elk stack on elk VM)
-ansible-playbook install-elk.yml         ( run playbook to install docker and the elk stack)
-ssh to elk machine                       ( ssh to elk VM )
-sudo docker ps                           ( check the the elk container is install and running)
-exit                                     ( Exit elk vm and return  to jumpbox)
-nano filebeat-config.yml                 ( create filebeat config file )
-nano filebeat-playbook.yml               ( Write yaml file to install filebeat on web servers)
-ansible-playbook filebeat-playbook.yml   ( run plaubook to install filebeat on webservers)
-http://(ELK-Public IP:5601/app/kibana    ( Open a web broswer and Navigate to logs/ add log data / system logs click on check data click on system logs dashboard )
-nano Metricbeat-config.yml               ( create metricbeat config file)
-nano Metricbeats-playbook.yml            ( write yaml file to install metric beats on webservers)
-ansible-playbook metricbeat-playbook.yml ( run playbook to install metricbeat on webservers) 
-http://(ELK-Public IP:5601/app/kibana    ( Open a web broswer and navigate to metric data / docker metrics / click on check data, click on Docker Metric dashboard)
 
+| Command                                    | Description                                                                                                               |
+|------------------------------------------|---------------------------------------------------------------------------------------------------------------------------|
+| ssh username@20.40.72.80                 | ssh to jump-box from home                                                                                                 |
+| sudo docker container list -a            | lists all docker container                                                                                                |
+| sudo docker start great_mahaviar         | start docker container great_mahaviar                                                                                     |
+| sudo docker ps                           | list docker containers that are running                                                                                   |
+| sudo docker attach great_mahaviar        | attaches you to the container                                                                                             |
+| cd /etc/ansible                          | Change directory to the Ansible directory                                                                                 |
+| ls -la                                   | List all file in directory                                                                                                |
+| nano hosts                               | add webservers and elf machines                                                                                           |
+| nano ansible.cfg                         | add user name to remote user                                                                                              |
+| nano pentest.yml                         | write YAMl file to install docker and DVWA on webservers                                                                  |
+| ansible-playbook pentest.yml             | run playbook to install docker and DVWA container n webservers                                                            |
+| ssh username@10.0.0.5                    | ssh to Web-1                                                                                                              |
+| sudo docker ps                           | check to make sure teh container is installed and running                                                                 |
+| exit                                     | exit out of Web-1 back to Jump-box                                                                                        |
+| nano install-elk.yml                     | write YAML file to install docker and ELK stack on ELK VM                                                                 |
+| ansible-playbook install-elk.yml         | run playbook to install docker and ELK stack on ELK VM                                                                    |
+| ssh username@10.1.0.4                    | ssh to ELK VM                                                                                                             |
+| sudo docker ps                           | check that the ELK container is installed and running                                                                     |
+| exit                                     | exit ELK VM back to Jump-Box                                                                                              |
+| nano filebeat-config.yml                 | create and edit filebeat config file                                                                                      |
+| nano filebeat-playbook.yml               | write YAML file to install filebeat on webservers                                                                         |
+| ansible-playbook filebeat-playbook.yml   | run playbook to install filebeat on webservers                                                                            |
+| http://(ELK-Publi IP:5601/app/kibana     | Open web browser and navigate to logs/ add log data/ system logs click on check data. click on system logs dashboard.     |
+| nano metricbeat-config.yml               | create metricbeat config file and edit it                                                                                 |
+| nano metricbeat-playbook.yml             | write YAML file to install metricbeat on webservers                                                                       |
+| ansible-playbook metricbeat-playbook.yml | run playbook to install metricbeat on webserers                                                                           |
+| http://(ELK-Publi IP:5601/app/kibana     | Open web browser and navigate to metric data / docker metrics / click on teh check data, click on Docker Metric dashboard |
+|                                          |                          
 
