@@ -87,7 +87,7 @@ The playbook implements the following tasks:
 
 The following screenshot displays the result of running `docker ps` after successfully configuring the ELK instance.
 
-![docker ps](Images/docker_ps_output.png)
+![docker ps](Images/Docker_ps_output.PNG)
 
 ### Target Machines & Beats
 This ELK server is configured to monitor the following machines:
@@ -101,10 +101,10 @@ We have installed the following Beats on these machines:
 
 These Beats allow us to collect the following information from each machine:
 - In 1-2 sentences, explain what kind of data each beat collects, and provide 1 example of what you expect to see. E.g., `Winlogbeat` collects Windows logs, which we use to track user logon events, etc.- Filebeat collects the following data syslogs/sudo commands/SSH logins/New users and groups and sends it to the  ELK stack to be analysed I would expect to see ssh logins and sudo commands. ref to 
-![Filebeat running](Images/Filebeats.png)
+![Filebeat running](Images/Filebeats.PNG)
 
 - Filemetrics collects the following data CPU usage / Memory usage / Network IO and I would expect to see CPU, memory and network usage running but nothing pushing these system hardwares to hard. ref to 
-![Metricbeat running](Images/Metricbeat.png)
+![Metricbeat running](Images/Metricbeat.PNG)
 
 ### Using the Playbook
 In order to use the playbook, you will need to have an Ansible control node already configured. Assuming you have such a control node provisioned: 
